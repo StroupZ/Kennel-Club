@@ -1,6 +1,5 @@
 import "../styles/globals.css"
 import { MoralisProvider } from "react-moralis"
-import Header from "../components/Header"
 import Head from "next/head"
 import { NotificationProvider } from "web3uikit"
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client"
@@ -21,7 +20,6 @@ function MyApp({ Component, pageProps }) {
             <MoralisProvider initializeOnMount={false}>
                 <ApolloProvider client={client}>
                     <NotificationProvider>
-                        <Header />
                         <Component {...pageProps} />
                     </NotificationProvider>
                 </ApolloProvider>
