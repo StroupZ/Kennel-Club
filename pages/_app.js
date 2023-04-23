@@ -3,6 +3,7 @@ import { MoralisProvider } from "react-moralis"
 import Head from "next/head"
 import { NotificationProvider } from "web3uikit"
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client"
+import Header from "../components/Header"
 
 const client = new ApolloClient({
     cache: new InMemoryCache(),
@@ -20,6 +21,7 @@ function MyApp({ Component, pageProps }) {
             <MoralisProvider initializeOnMount={false}>
                 <ApolloProvider client={client}>
                     <NotificationProvider>
+                        <Header />
                         <Component {...pageProps} />
                     </NotificationProvider>
                 </ApolloProvider>

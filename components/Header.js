@@ -2,7 +2,7 @@ import { ConnectButton } from "web3uikit"
 import Link from "next/link"
 import ProceedsModal from "./ProceedsModal"
 import SellModal from "./SellModal"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function Header() {
     const [showProceedsModal, setShowProceedsModal] = useState(false)
@@ -21,6 +21,11 @@ export default function Header() {
     function handleClick2() {
         setShowSellModal(true)
     }
+
+    useEffect(() => {
+        setShowProceedsModal(false)
+        setShowSellModal(false)
+    }, [])
 
     return (
         <nav className="p-2 border-b-2 border-neutral-300 flex flex-col md:flex-row justify-between items-center">
@@ -50,7 +55,7 @@ export default function Header() {
                     className="cursor-pointer mr-2 p-4 hover:scale-125 hover:text-blue-600"
                     onClick={handleClick}
                 >
-                    Proceeds
+                    Proceedss
                 </div>
                 <div>
                     <ProceedsModal onClose={hideProceedsModal} isVisible={showProceedsModal} />
