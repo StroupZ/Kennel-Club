@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
 import { useWeb3Contract, useMoralis } from "react-moralis"
-import nftMarketplaceAbi from "../constants/NftMarketplace.json"
 import nftAbi from "../constants/BasicNft.json"
 import Image from "next/image"
-import { Card, useNotification } from "web3uikit"
+import { Card, Tooltip } from "web3uikit"
 import { ethers } from "ethers"
-import UpdateListingModal from "./UpdateListingModal"
+import OwnerModal from "./OwnerModal"
+import BuyModal from "./BuyModal"
 
 const truncateStr = (fullStr, strLen) => {
     if (fullStr.length <= strLen) return fullStr
@@ -22,14 +22,29 @@ const truncateStr = (fullStr, strLen) => {
     )
 }
 
-export default function NFTBox({ price, nftAddress, tokenId, marketplaceAddress, seller }) {
+export default function NFTBox({
+    price,
+    nftAddress,
+    tokenId,
+    marketplaceAddress,
+    seller,
+    setIsModal,
+}) {
     const { isWeb3Enabled, account } = useMoralis()
     const [imageURI, setImageURI] = useState("")
     const [tokenName, setTokenName] = useState("")
     const [tokenDescription, setTokenDescription] = useState("")
-    const [showModal, setShowModal] = useState(false)
-    const hideModal = () => setShowModal(false)
-    const dispatch = useNotification()
+    const [showOwnerModal, setShowOwnerModal] = useState(false)
+    const [showBuyModal, setShowBuyModal] = useState(false)
+
+    function hideOwnerModal() {
+        setShowOwnerModal(false)
+        setIsModal(false)
+    }
+    function hideBuyModal() {
+        setShowBuyModal(false)
+        setIsModal(false)
+    }
 
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
@@ -40,23 +55,10 @@ export default function NFTBox({ price, nftAddress, tokenId, marketplaceAddress,
         },
     })
 
-    const { runContractFunction: buyItem } = useWeb3Contract({
-        abi: nftMarketplaceAbi,
-        contractAddress: marketplaceAddress,
-        functionName: "buyItem",
-        msgValue: price,
-        params: {
-            nftAddress: nftAddress,
-            tokenId: tokenId,
-        },
-    })
-
     async function updateUI() {
         const tokenURI = await getTokenURI()
         console.log(`The TokenURI is ${tokenURI}`)
-        // We are going to cheat a little here...
         if (tokenURI) {
-            // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
             const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")
             const tokenURIResponse = await (await fetch(requestURL)).json()
             const imageURI = tokenURIResponse.image
@@ -64,13 +66,7 @@ export default function NFTBox({ price, nftAddress, tokenId, marketplaceAddress,
             setImageURI(imageURIURL)
             setTokenName(tokenURIResponse.name)
             setTokenDescription(tokenURIResponse.description)
-            // We could render the Image on our sever, and just call our sever.
-            // For testnets & mainnet -> use moralis server hooks
-            // Have the world adopt IPFS
-            // Build our own IPFS gateway
         }
-        // get the tokenURI
-        // using the image tag from the tokenURI, get the image
     }
 
     useEffect(() => {
@@ -83,21 +79,8 @@ export default function NFTBox({ price, nftAddress, tokenId, marketplaceAddress,
     const formattedSellerAddress = isOwnedByUser ? "you" : truncateStr(seller || "", 15)
 
     const handleCardClick = () => {
-        isOwnedByUser
-            ? setShowModal(true)
-            : buyItem({
-                  onError: (error) => console.log(error),
-                  onSuccess: () => handleBuyItemSuccess(),
-              })
-    }
-
-    const handleBuyItemSuccess = () => {
-        dispatch({
-            type: "success",
-            message: "Item bought!",
-            title: "Item Bought",
-            position: "topR",
-        })
+        isOwnedByUser ? setShowOwnerModal(true) : setShowBuyModal(true)
+        setIsModal(true)
     }
 
     return (
@@ -105,36 +88,62 @@ export default function NFTBox({ price, nftAddress, tokenId, marketplaceAddress,
             <div>
                 {imageURI ? (
                     <div>
-                        <UpdateListingModal
-                            isVisible={showModal}
+                        <OwnerModal
+                            price={price}
+                            formattedSellerAddress={formattedSellerAddress}
+                            title={tokenName}
+                            description={tokenDescription}
+                            imageURI={imageURI}
+                            isVisible={showOwnerModal}
                             tokenId={tokenId}
                             marketplaceAddress={marketplaceAddress}
                             nftAddress={nftAddress}
-                            onClose={hideModal}
+                            onClose={hideOwnerModal}
                         />
-                        <Card
+                        <BuyModal
+                            price={price}
+                            formattedSellerAddress={formattedSellerAddress}
                             title={tokenName}
                             description={tokenDescription}
-                            onClick={handleCardClick}
+                            imageURI={imageURI}
+                            isVisible={showBuyModal}
+                            tokenId={tokenId}
+                            marketplaceAddress={marketplaceAddress}
+                            nftAddress={nftAddress}
+                            onClose={hideBuyModal}
+                        />
+                        <Tooltip
+                            position="top"
+                            content={isOwnedByUser ? "Manage Listing" : "Buy Me!"}
+                            minWidth={isOwnedByUser ? 130 : null}
                         >
-                            <div className="p-2">
-                                <div className="flex flex-col items-end gap-2">
-                                    <div>#{tokenId}</div>
-                                    <div className="italic text-sm">
-                                        Owned by {formattedSellerAddress}
-                                    </div>
-                                    <Image
-                                        loader={() => imageURI}
-                                        src={imageURI}
-                                        height="200"
-                                        width="200"
-                                    />
-                                    <div className="font-bold">
-                                        {ethers.utils.formatUnits(price, "ether")} ETH
+                            <Card
+                                title={tokenName}
+                                description={tokenDescription}
+                                onClick={handleCardClick}
+                            >
+                                <div className="p-2">
+                                    <div className="flex flex-col items-end gap-2">
+                                        <div>#{tokenId}</div>
+                                        <div className="italic text-sm">
+                                            Owned by {formattedSellerAddress}
+                                        </div>
+                                        <Image
+                                            loader={() => imageURI}
+                                            src={imageURI}
+                                            width="200"
+                                            height="200"
+                                            style={{
+                                                height: 200,
+                                            }}
+                                        />
+                                        <div className="font-bold">
+                                            {ethers.utils.formatUnits(price, "ether")} ETH
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Card>
+                            </Card>
+                        </Tooltip>
                     </div>
                 ) : (
                     <div>Loading...</div>
