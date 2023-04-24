@@ -3,7 +3,7 @@ import NFTBox from "../components/NFTBox"
 import networkMapping from "../constants/networkMapping.json"
 import GET_ACTIVE_ITEMS from "../constants/subgraphQueries"
 import { useQuery } from "@apollo/client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ConnectModal from "../components/ConnectModal"
 import Header from "../components/Header"
 import ProceedsModal from "../components/ProceedsModal"
@@ -29,6 +29,11 @@ export default function Home() {
     const hideSellModal = () => {
         setShowSellModal(false)
     }
+
+    useEffect(() => {
+        setShowSellModal(false)
+        setShowProceedsModal(false)
+    }, [])
 
     return (
         <div>
