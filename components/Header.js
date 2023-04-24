@@ -4,12 +4,17 @@ import ProceedsModal from "./ProceedsModal"
 import SellModal from "./SellModal"
 import { useState, useEffect } from "react"
 
-export default function Header() {
-    const [showProceedsModal, setShowProceedsModal] = useState(false)
+export default function Header({
+    setShowSellModal,
+    setShowProceedsModal,
+    showSellModal,
+    showProceedsModal,
+}) {
+    // const [showProceedsModal, setShowProceedsModal] = useState(false)
     const hideProceedsModal = () => {
         setShowProceedsModal(false)
     }
-    const [showSellModal, setShowSellModal] = useState(false)
+    // const [showSellModal, setShowSellModal] = useState(false)
     const hideSellModal = () => {
         setShowSellModal(false)
     }
@@ -22,10 +27,10 @@ export default function Header() {
         setShowSellModal(true)
     }
 
-    useEffect(() => {
-        setShowProceedsModal(false)
-        setShowSellModal(false)
-    }, [])
+    // useEffect(() => {
+    //     setShowProceedsModal(false)
+    //     setShowSellModal(false)
+    // }, [])
 
     return (
         <nav className="p-2 border-b-2 border-neutral-300 flex flex-col md:flex-row justify-between items-center">
@@ -55,14 +60,16 @@ export default function Header() {
                     className="cursor-pointer mr-2 p-4 hover:scale-125 hover:text-blue-600"
                     onClick={handleClick}
                 >
-                    Proceedss
+                    Proceeds
                 </div>
                 <div>
                     <ProceedsModal onClose={hideProceedsModal} isVisible={showProceedsModal} />
+                    {/* <ProceedsModal onClose={hideProceedsModal} isVisible={showProceedsModal} /> */}
                 </div>
 
                 <div>
                     <SellModal onClose={hideSellModal} isVisible={showSellModal} />
+                    {/* <SellModal onClose={hideSellModal} isVisible={showSellModal} /> */}
                 </div>
                 <ConnectButton moralisAuth={false} />
             </div>
