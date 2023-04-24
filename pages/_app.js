@@ -14,6 +14,11 @@ const client = new ApolloClient({
 function MyApp({ Component, pageProps }) {
     const [showProceedsModal, setShowProceedsModal] = useState(false)
     const [showSellModal, setShowSellModal] = useState(false)
+    useEffect(() => {
+        setShowProceedsModal(false)
+        setShowSellModal(false)
+    }, [])
+
     return (
         <div>
             <Head>
