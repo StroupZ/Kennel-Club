@@ -2,22 +2,17 @@ import { ConnectButton } from "web3uikit"
 import Link from "next/link"
 import ProceedsModal from "./ProceedsModal"
 import SellModal from "./SellModal"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
-export default function Header({
-    setShowSellModal,
-    setShowProceedsModal,
-    showSellModal,
-    showProceedsModal,
-}) {
+export default function Header({ setShowSellModal, setShowProceedsModal }) {
     // const [showProceedsModal, setShowProceedsModal] = useState(false)
-    const hideProceedsModal = () => {
-        setShowProceedsModal(false)
-    }
+    // const hideProceedsModal = () => {
+    //     setShowProceedsModal(false)
+    // }
     // const [showSellModal, setShowSellModal] = useState(false)
-    const hideSellModal = () => {
-        setShowSellModal(false)
-    }
+    // const hideSellModal = () => {
+    //     setShowSellModal(false)
+    // }
 
     function handleClick() {
         setShowProceedsModal(true)
@@ -26,11 +21,6 @@ export default function Header({
     function handleClick2() {
         setShowSellModal(true)
     }
-
-    // useEffect(() => {
-    //     setShowProceedsModal(false)
-    //     setShowSellModal(false)
-    // }, [])
 
     return (
         <nav className="p-2 border-b-2 border-neutral-300 flex flex-col md:flex-row justify-between items-center">
@@ -62,15 +52,13 @@ export default function Header({
                 >
                     Proceeds
                 </div>
-                <div>
+                {/* <div>
                     <ProceedsModal onClose={hideProceedsModal} isVisible={showProceedsModal} />
-                    {/* <ProceedsModal onClose={hideProceedsModal} isVisible={showProceedsModal} /> */}
                 </div>
 
                 <div>
                     <SellModal onClose={hideSellModal} isVisible={showSellModal} />
-                    {/* <SellModal onClose={hideSellModal} isVisible={showSellModal} /> */}
-                </div>
+                </div> */}
                 <ConnectButton moralisAuth={false} />
             </div>
         </nav>

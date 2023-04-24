@@ -4,7 +4,6 @@ import Head from "next/head"
 import { NotificationProvider } from "web3uikit"
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client"
 import Header from "../components/Header"
-import { useEffect, useState } from "react"
 
 const client = new ApolloClient({
     cache: new InMemoryCache(),
@@ -12,13 +11,6 @@ const client = new ApolloClient({
 })
 
 function MyApp({ Component, pageProps }) {
-    const [showProceedsModal, setShowProceedsModal] = useState(false)
-    const [showSellModal, setShowSellModal] = useState(false)
-    useEffect(() => {
-        setShowProceedsModal(false)
-        setShowSellModal(false)
-    }, [])
-
     return (
         <div>
             <Head>
@@ -29,12 +21,7 @@ function MyApp({ Component, pageProps }) {
             <MoralisProvider initializeOnMount={false}>
                 <ApolloProvider client={client}>
                     <NotificationProvider>
-                        <Header
-                            setShowSellModal={setShowSellModal}
-                            setShowProceedsModal={setShowProceedsModal}
-                            showSellModal={showSellModal}
-                            showProceedsModal={showProceedsModal}
-                        />
+                        {/* <Header /> */}
                         <Component {...pageProps} />
                     </NotificationProvider>
                 </ApolloProvider>
