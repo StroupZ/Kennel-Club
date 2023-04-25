@@ -3,23 +3,32 @@ import Link from "next/link"
 import ProceedsModal from "./ProceedsModal"
 import SellModal from "./SellModal"
 import { useState } from "react"
+import { useMoralis } from "react-moralis"
+import networkMapping from "../constants/networkMapping.json"
 
-export default function Header({ setShowSellModal, setShowProceedsModal }) {
-    // const [showProceedsModal, setShowProceedsModal] = useState(false)
-    // const hideProceedsModal = () => {
-    //     setShowProceedsModal(false)
-    // }
-    // const [showSellModal, setShowSellModal] = useState(false)
-    // const hideSellModal = () => {
-    //     setShowSellModal(false)
-    // }
+export default function Header() {
+    const [showProceedsModal, setShowProceedsModal] = useState(false)
+    const hideProceedsModal = () => {
+        setShowProceedsModal(false)
+    }
+    const [showSellModal, setShowSellModal] = useState(false)
+    const hideSellModal = () => {
+        setShowSellModal(false)
+    }
+
+    const { isWeb3Enabled, chainId } = useMoralis()
+    const chainString = chainId ? parseInt(chainId).toString() : null
+    const marketplaceAddress =
+        chainId && networkMapping[chainString]
+            ? networkMapping[chainString].NftMarketplace[0]
+            : null
 
     function handleClick() {
-        setShowProceedsModal(true)
+        isWeb3Enabled && marketplaceAddress ? setShowProceedsModal(true) : null
     }
 
     function handleClick2() {
-        setShowSellModal(true)
+        isWeb3Enabled && marketplaceAddress ? setShowSellModal(true) : null
     }
 
     return (
@@ -52,13 +61,13 @@ export default function Header({ setShowSellModal, setShowProceedsModal }) {
                 >
                     Proceeds
                 </div>
-                {/* <div>
+                <div>
                     <ProceedsModal onClose={hideProceedsModal} isVisible={showProceedsModal} />
                 </div>
 
                 <div>
                     <SellModal onClose={hideSellModal} isVisible={showSellModal} />
-                </div> */}
+                </div>
                 <ConnectButton moralisAuth={false} />
             </div>
         </nav>

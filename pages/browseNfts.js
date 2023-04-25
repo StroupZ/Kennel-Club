@@ -6,9 +6,6 @@ import { useQuery } from "@apollo/client"
 import { Dropdown } from "web3uikit"
 import { useState } from "react"
 import ConnectModal from "../components/ConnectModal"
-import Header from "../components/Header"
-import ProceedsModal from "../components/ProceedsModal"
-import SellModal from "../components/SellModal"
 
 export default function browseNfts() {
     const { chainId, isWeb3Enabled } = useMoralis()
@@ -27,128 +24,101 @@ export default function browseNfts() {
         setOption(value)
     }
 
-    const [showProceedsModal, setShowProceedsModal] = useState(false)
-    const [showSellModal, setShowSellModal] = useState(false)
-    const hideProceedsModal = () => {
-        setShowProceedsModal(false)
-    }
-    const hideSellModal = () => {
-        setShowSellModal(false)
-    }
-
-    return (
-        <div>
-            <Header
-                setShowProceedsModal={setShowProceedsModal}
-                setShowSellModal={setShowSellModal}
-            />
-            <div className={showSellModal ? null : "hidden"}>
-                <SellModal onClose={hideSellModal} isVisible={showSellModal} />
-            </div>
-            <div className={showProceedsModal ? null : "hidden"}>
-                <ProceedsModal onClose={hideProceedsModal} isVisible={showProceedsModal} />
-            </div>
-            {isWeb3Enabled ? (
-                marketplaceAddress ? (
-                    <div className="mx-10">
-                        <div className="flex font-bold text-3xl justify-center mt-10 font-sourceCodePro">
-                            Browse All NFTs
-                        </div>
-                        <div className="flex justify-end mt-5 mb-14">
-                            <Dropdown
-                                onChange={handleOption}
-                                label="Sort By Price: "
-                                options={[
-                                    {
-                                        id: 0,
-                                        label: "High to Low",
-                                        value: 0,
-                                    },
-                                    {
-                                        id: 1,
-                                        label: "Low to High",
-                                        value: 1,
-                                    },
-                                ]}
-                                defaultOptionIndex={0}
-                            />
-                        </div>
-                        <div className="flex flex-wrap justify-center">
-                            {isWeb3Enabled ? (
-                                loading || !listedNfts ? (
-                                    <div>Loading...</div>
-                                ) : option == false ? (
-                                    listedNfts.priceHigh.map((nft) => {
-                                        console.log(nft)
-                                        const { price, nftAddress, tokenId, seller } = nft
-                                        return (
-                                            <div
-                                                className={`p-5 mb-10 ${
-                                                    isModal ? null : "hover:scale-110"
-                                                }`}
-                                            >
-                                                <div className="relative">
-                                                    <div className="absolute -inset-0.5 bg-gradient-to-br from-pink-300 to-indigo-300 rounded-[20px] blur"></div>
-                                                    <div className="border-[#888] border-2 rounded-[20px]">
-                                                        <NFTBox
-                                                            price={price}
-                                                            nftAddress={nftAddress}
-                                                            tokenId={tokenId}
-                                                            marketplaceAddress={marketplaceAddress}
-                                                            seller={seller}
-                                                            key={`${nftAddress}${tokenId}`}
-                                                            setIsModal={setIsModal}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                ) : (
-                                    listedNfts.priceLow.map((nft) => {
-                                        console.log(nft)
-                                        const { price, nftAddress, tokenId, seller } = nft
-                                        return (
-                                            <div
-                                                className={`p-5 mb-10 ${
-                                                    isModal ? null : "hover:scale-110"
-                                                }`}
-                                            >
-                                                <div className="relative">
-                                                    <div className="absolute -inset-0.5 bg-gradient-to-br from-pink-300 to-indigo-300 rounded-[20px] blur"></div>
-                                                    <div className="border-[#888] border-2 rounded-[20px]">
-                                                        <NFTBox
-                                                            price={price}
-                                                            nftAddress={nftAddress}
-                                                            tokenId={tokenId}
-                                                            marketplaceAddress={marketplaceAddress}
-                                                            seller={seller}
-                                                            key={`${nftAddress}${tokenId}`}
-                                                            setIsModal={setIsModal}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                )
-                            ) : (
-                                <div className={isWeb3Enabled ? "hidden" : null}>
-                                    <ConnectModal />
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                ) : (
-                    <div className="text-center flex justify-center font-sourceCodePro font-bold text-black text-xl m-20 md:mt-48">
-                        Network not currently supported... please switch to Goerli Testnet.
-                    </div>
-                )
-            ) : (
-                <div className={isWeb3Enabled ? "hidden" : null}>
-                    <ConnectModal />
+    return isWeb3Enabled ? (
+        marketplaceAddress ? (
+            <div className="mx-10">
+                <div className="flex font-bold text-3xl justify-center mt-10 font-sourceCodePro">
+                    Browse All NFTs
                 </div>
-            )}
-        </div>
+                <div className="flex justify-end mt-5 mb-14">
+                    <Dropdown
+                        onChange={handleOption}
+                        label="Sort By Price: "
+                        options={[
+                            {
+                                id: 0,
+                                label: "High to Low",
+                                value: 0,
+                            },
+                            {
+                                id: 1,
+                                label: "Low to High",
+                                value: 1,
+                            },
+                        ]}
+                        defaultOptionIndex={0}
+                    />
+                </div>
+                <div className="flex flex-wrap justify-center">
+                    {isWeb3Enabled ? (
+                        loading || !listedNfts ? (
+                            <div>Loading...</div>
+                        ) : option == false ? (
+                            listedNfts.priceHigh.map((nft) => {
+                                console.log(nft)
+                                const { price, nftAddress, tokenId, seller } = nft
+                                return (
+                                    <div
+                                        className={`p-5 mb-10 ${
+                                            isModal ? null : "hover:scale-110"
+                                        }`}
+                                    >
+                                        <div className="relative">
+                                            <div className="absolute -inset-0.5 bg-gradient-to-br from-pink-300 to-indigo-300 rounded-[20px] blur"></div>
+                                            <div className="border-[#888] border-2 rounded-[20px]">
+                                                <NFTBox
+                                                    price={price}
+                                                    nftAddress={nftAddress}
+                                                    tokenId={tokenId}
+                                                    marketplaceAddress={marketplaceAddress}
+                                                    seller={seller}
+                                                    key={`${nftAddress}${tokenId}`}
+                                                    setIsModal={setIsModal}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        ) : (
+                            listedNfts.priceLow.map((nft) => {
+                                console.log(nft)
+                                const { price, nftAddress, tokenId, seller } = nft
+                                return (
+                                    <div
+                                        className={`p-5 mb-10 ${
+                                            isModal ? null : "hover:scale-110"
+                                        }`}
+                                    >
+                                        <div className="relative">
+                                            <div className="absolute -inset-0.5 bg-gradient-to-br from-pink-300 to-indigo-300 rounded-[20px] blur"></div>
+                                            <div className="border-[#888] border-2 rounded-[20px]">
+                                                <NFTBox
+                                                    price={price}
+                                                    nftAddress={nftAddress}
+                                                    tokenId={tokenId}
+                                                    marketplaceAddress={marketplaceAddress}
+                                                    seller={seller}
+                                                    key={`${nftAddress}${tokenId}`}
+                                                    setIsModal={setIsModal}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        )
+                    ) : (
+                        <ConnectModal />
+                    )}
+                </div>
+            </div>
+        ) : (
+            <div className="text-center flex justify-center font-sourceCodePro font-bold text-black text-xl m-20 md:mt-48">
+                Network not currently supported... please switch to Goerli Testnet.
+            </div>
+        )
+    ) : (
+        <ConnectModal />
     )
 }

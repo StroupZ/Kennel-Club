@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }) {
             <MoralisProvider initializeOnMount={false}>
                 <ApolloProvider client={client}>
                     <NotificationProvider>
-                        {/* <Header /> */}
+                        <Header />
                         <Component {...pageProps} />
                     </NotificationProvider>
                 </ApolloProvider>
