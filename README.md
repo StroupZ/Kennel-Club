@@ -35,4 +35,23 @@ This is the Kennel Club NFT Marketplace... a dApp which enables the buying, list
 - [Goerli ETH](https://goerlifaucet.com/)
 <br><br>
 ## Showcase
-
+Home/Recently Listed
+![kennel-club-image](https://github.com/StroupZ/Kennel-Club/assets/119818799/5f8724e2-0b14-407e-b796-0e0beb66d923)
+<br><br>
+Browse All NFTs
+![kennel-club-browse](https://github.com/StroupZ/Kennel-Club/assets/119818799/aaedbe96-54e8-4faa-8660-bc9e151f3143)
+<br><br>
+Owner Modal
+![kennel-club-manage](https://github.com/StroupZ/Kennel-Club/assets/119818799/985a49b4-2a48-42e7-aec1-64a4cd01fa45)
+<br><br>
+Purchase Modal
+![kennel-club-purchase](https://github.com/StroupZ/Kennel-Club/assets/119818799/a6d8f454-7140-4cc2-aab7-743dd3fbe58d)
+<br><br>
+Sell Modal
+![kennel-club-sell](https://github.com/StroupZ/Kennel-Club/assets/119818799/56d4c4a9-348b-4430-b761-77e8b27351de)
+<br><br>
+Proceeds Modal
+![kennel-club-proceeds](https://github.com/StroupZ/Kennel-Club/assets/119818799/221e9d1c-cdfc-4e25-b9b0-de35e21935aa)
+<br><br>
+Connect Modal
+![kennel-club-connect](https://github.com/StroupZ/Kennel-Club/assets/119818799/3e595900-f226-407a-bda0-8cf1cdc9da7e)
